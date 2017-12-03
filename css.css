@@ -1,0 +1,40 @@
+body{
+  text-align:center;
+  font-family: Arial;
+}
+
+.titl{
+  position: absolute;
+  top:30px;
+  z-index: 199;
+  width: 100%;
+  margin: auto;
+}
+
+#gameDiv{
+  background:url("images/map.jpg");
+  height: 922px;
+  width: 1383px;
+  margin: auto;
+  position: relative;
+}
+
+
+#rose{
+  position: absolute;
+  width:100px;
+  height: 131px;
+
+
+  -webkit-transition: all 0.5s ease;
+  -webkit-transition-delay: 0.5s;
+}
+
+.button{
+  position: absolute;
+  left:0;
+  top:300px;
+  z-index: 12131;
+  background: red;
+}
+

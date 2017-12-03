@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TrollyWorld</title>
+    <script src="https://unpkg.com/vue"></script>
+
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+<h2 class="titl">Привет Амира! Это игра Троллий Мир. </h2>
+<div id="gameDiv" v-on:click="onMDown">
+    <div id="rose"  v-bind:style="{top: topRosa, left:leftRosa}">
+        <img src="images/rose.png" >
+    </div>
+
+    <button class="button" v-on:click="onClick">НАЖМИ</button>
+</div>
+
+</body>
+</html>
+<script src="main.js" style=""></script>
