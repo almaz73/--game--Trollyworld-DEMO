@@ -3,6 +3,11 @@ body{
   font-family: Arial;
 }
 
+button{
+  width: 150px;
+  height: 50px;
+}
+
 .titl{
   position: absolute;
   top:30px;
@@ -12,7 +17,8 @@ body{
 }
 
 #gameDiv{
-  background:url("images/map.jpg");
+  /*background:url("images/map.jpg");*/
+  background: #888;
   height: 922px;
   width: 1383px;
   margin: auto;
@@ -24,17 +30,39 @@ body{
   position: absolute;
   width:100px;
   height: 131px;
-
-
-  -webkit-transition: all 0.5s ease;
-  -webkit-transition-delay: 0.5s;
+  -webkit-transition: all 0.2s ease;
+  -webkit-transition-delay: 0.2s;
 }
 
-.button{
+
+#startWindow{
   position: absolute;
-  left:0;
-  top:300px;
-  z-index: 12131;
-  background: red;
+  width: 650px;
+  height: 400px;
+  left: 400px;
+  margin: auto;
+  margin-top:200px;
+  background: #eee;
+  border-radius: 20px;
+  border: double 5px #999;
+}
+
+.imgChoisedPlayer{
+  margin: -2px;
+  border: 2px solid red;
+  border-radius: 10px;
+}
+.imgChoisedComputer{
+  margin: -2px;
+  border: 2px solid blue;
+  border-radius: 10px;
+}
+
+#startWindow img{
+  cursor:pointer;
+}
+
+#startWindow span{
+  margin: 5px;
 }
 
