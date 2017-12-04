@@ -1,68 +1,88 @@
-body{
-  text-align:center;
-  font-family: Arial;
+body {
+   text-align: center;
+   font-family: Arial;
 }
 
-button{
-  width: 150px;
-  height: 50px;
+button {
+   width: 150px;
+   height: 50px;
 }
 
-.titl{
-  position: absolute;
-  top:30px;
-  z-index: 199;
-  width: 100%;
-  margin: auto;
+.titl {
+   position: absolute;
+   top: 30px;
+   z-index: 199;
+   width: 100%;
+   margin: auto;
 }
 
-#gameDiv{
-  /*background:url("images/map.jpg");*/
-  background: #888;
-  height: 922px;
-  width: 1383px;
-  margin: auto;
-  position: relative;
+#gameDiv {
+   background: url("images/map.jpg");
+   /*background: #888;*/
+   height: 922px;
+   width: 1383px;
+   margin: auto;
+   position: relative;
 }
 
-
-#rose{
-  position: absolute;
-  width:100px;
-  height: 131px;
-  -webkit-transition: all 0.2s ease;
-  -webkit-transition-delay: 0.2s;
+#playerPic, #computerPic {
+   position: absolute;
+   -webkit-transition: all 0.2s ease;
 }
 
-
-#startWindow{
-  position: absolute;
-  width: 650px;
-  height: 400px;
-  left: 400px;
-  margin: auto;
-  margin-top:200px;
-  background: #eee;
-  border-radius: 20px;
-  border: double 5px #999;
+#playerPic img {
+   vertical-align: bottom;
 }
 
-.imgChoisedPlayer{
-  margin: -2px;
-  border: 2px solid red;
-  border-radius: 10px;
-}
-.imgChoisedComputer{
-  margin: -2px;
-  border: 2px solid blue;
-  border-radius: 10px;
-}
-
-#startWindow img{
-  cursor:pointer;
+#startWindow {
+   position: absolute;
+   width: 700px;
+   height: 400px;
+   left: 350px;
+   margin: auto;
+   margin-top: 200px;
+   background: #eee;
+   border-radius: 20px;
+   border: double 5px #999;
 }
 
-#startWindow span{
-  margin: 5px;
+.imgChoisedPlayer {
+   margin: -2px;
+   border: 2px solid red;
+   border-radius: 10px;
 }
 
+.imgChoisedComputer {
+   margin: -2px;
+   border: 2px solid blue;
+   border-radius: 10px;
+}
+
+#startWindow img {
+   cursor: pointer;
+}
+
+#startWindow span {
+   margin: 5px;
+   display: inline-block
+}
+
+#bone {
+   position: absolute;
+   padding: 5px;
+   border-radius: 10px;
+   border: 2px solid #ddd;
+   height: 90px;
+   width: 90px;
+   background: #eee;
+   top: 540px;
+   left: 660px;
+   cursor: pointer;
+   font-size: 60px;
+   -webkit-transition: all 0.5s ease;
+   transform: scale(1, 1);
+}
+#bone.little {
+   transform: scale(0.01, 0.01);
+   background: navajowhite;
+}

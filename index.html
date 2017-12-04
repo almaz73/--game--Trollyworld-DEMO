@@ -7,34 +7,49 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-<!--<h2 class="titl">Привет Амира! Это игра Троллий Мир. </h2>-->
-<div id="gameDiv" v-on:click="onMDown">
-    <div id="rose" v-bind:style="{top: topRosa, left:leftRosa}">
-        <img src="images/Rose.png">
+<h2 class="titl">Привет Друг! Это игра Троллий Мир. Сможешь ли победить в честной гонке?</h2>
+<div id="gameDiv">
+
+    <div id="bone" @click="onBone()" :class="myThrow">
+        <div v-if="defaultBone==1">&#9856;</div>
+        <div v-if="defaultBone==2">&#9857;</div>
+        <div v-if="defaultBone==3">&#9858;</div>
+        <div v-if="defaultBone==4">&#9859;</div>
+        <div v-if="defaultBone==5">&#9860;</div>
+        <div v-if="defaultBone==6">&#9861;</div>
     </div>
+
+    <div id="playerPic" v-bind:style="{top: hPlayer, left:wPlayer}">
+        <img v-bind:src="defaultPlayer | addPathImg">
+    </div>
+    <div id="computerPic" v-bind:style="{top: hComp, left:wComp}">
+        <img v-bind:src="defaultComputer | addPathImg">
+    </div>
+
 
     <button class="button" v-on:click="onClick">НАЖМИ</button>
 
+
+
     <div id="startWindow" v-if="start">
-        <br>
         <h2>Троллий мир</h2>
         <h4>Выбери игрока</h4>
-        <span v-for="troll in allTrolles" style="display: inline-block">
+        <span v-for="troll in allTrolles">
             <div>
                 {{showHero(troll.name)?showHero(troll.name):"&nbsp;"}}
             </div>
+            <div>{{showHero(troll.name)?troll.name:'&nbsp;'}}</div>
             <br>
             <div>
             <img
-                 v-bind:name="troll.name"
-                 v-bind:src="troll.name | addPuthImage"
-                 v-on:click="onChoiceHero($event)"
-                 v-bind:class="choseImg(troll.name)">
-                </div>
-
+                    v-bind:name="troll.name"
+                    v-bind:src="troll.name | addPathImg"
+                    v-on:click="onChoiceHero($event)"
+                    v-bind:class="choseImg(troll.name)">
+            </div>
         </span>
         <br><br>
-        <button @click="onStart()"> НАЧАТЬ </button>
+        <button @click="onStart()">НАЧАТЬ</button>
     </div>
 
 </div>
