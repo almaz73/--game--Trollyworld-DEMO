@@ -86,3 +86,21 @@ button {
    transform: scale(0.01, 0.01);
    background: navajowhite;
 }
+
+#messagesDiv {
+   position: absolute;
+   padding: 15px 5px;
+   border-radius: 10px;
+   border: 2px solid #ddd;
+   width: 450px;
+   background: #eee;
+   top: 710px;
+   left: 475px;
+   font-size: 20px;
+}
+
+#messagesDiv input{
+   width: 40px;
+   font-size: 20px;
+   margin: -5px 5px;
+}

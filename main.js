@@ -1,16 +1,11 @@
 new Vue({
    el: '#gameDiv',
    methods: {
-      onClick: function () {
-         clearTimeout(this.myTimer);
-         this.autoStep("computer", 2, true);
-         this.autoStep("player", 4, true);
-
-      },
-      autoStep: function (obj, where, jamp) {
+      autoStep: function (obj, where, jamp, transition) {
          // obj - "computer"||"player"
          // where - конечная точка
          // jamp - если нужно скачком
+         // tranzition - нужно ли передавать ход
          if (where > 48 || where < 1) return;
          var pathEl = undefined;
          var step = (obj === "player") ? this.stepP : this.stepC;
@@ -33,8 +28,15 @@ new Vue({
 
          if (step !== where) {
             this.myTimer = setTimeout(function () {
-               this.autoStep(obj, where);
+               this.autoStep(obj, where, jamp, transition);
             }.bind(this), 500);
+         } else {
+            console.log(" ==transition= ", transition)
+            if (transition) {
+               this.onForAnotherPlayer(obj == "player" ? "computer" : "player");
+            } else{
+               this.message = "Ваш ход"
+            }
          }
 
       },
@@ -68,16 +70,31 @@ new Vue({
       onStart: function () { //начинаем игру
          this.start = false
       },
-      onBone: function () { // бросаем кость
+      onBone: function (obj) { // бросаем кость
          this.myThrow = (this.myThrow === "") ? "little" : "";
          if (this.myThrow !== "") {
             setTimeout(function () {
                var random = Math.round(Math.random() * 5 + 1);
                this.defaultBone = random;
-               this.onBone()
+               this.onBone(obj);
+               this.onStepAfterBone(obj);
             }.bind(this), 500)
          }
       },
+      onStepAfterBone: function (obj) {
+         // ход игрока или компьютера
+         setTimeout(function () {
+            var nextStep = (obj === "player") ? this.stepP : this.stepC;
+            this.autoStep(obj, this.defaultBone + nextStep, null, (obj === "player"));
+         }.bind(this), 1000);
+      },
+      onForAnotherPlayer: function (obj) {
+         // переход другому игроку
+         if (obj == "computer") {
+            this.message = "Ход комьютера"
+            this.onBone(obj)
+         }
+      }
 
    },
    filters: {
@@ -89,9 +106,9 @@ new Vue({
       start: false,
       defaultPlayer: "Rose",
       defaultComputer: "Rosepiece",
-      defaultBone: 2,
-      stepP: 2, // шаги пользователя
-      stepC: 2, // шаги компьютера
+      defaultBone: 0, // кость
+      stepP: 0, // шаги пользователя
+      stepC: 0, // шаги компьютера
       hPlayer: "310px",
       wPlayer: "0px",
       hComp: "380px",
@@ -157,5 +174,7 @@ new Vue({
          {id: 48, x: 1177, y: 499},
       ],
       myTimer: null,
+      message: "Ваш ход. Нажмите кость.",
+      questionMind: false,
    },
 });

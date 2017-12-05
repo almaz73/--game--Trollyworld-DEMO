@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-<h2 class="titl">Привет Друг! Это игра Троллий Мир. Сможешь ли победить в честной гонке?</h2>
+<!--<h2 class="titl">Привет Друг! Это игра Троллий Мир. Сможешь ли победить в честной гонке?</h2>-->
 <div id="gameDiv">
 
-    <div id="bone" @click="onBone()" :class="myThrow">
+    <div id="bone" @click="onBone('player')" :class="myThrow">
         <div v-if="defaultBone==1">&#9856;</div>
         <div v-if="defaultBone==2">&#9857;</div>
         <div v-if="defaultBone==3">&#9858;</div>
@@ -26,9 +26,10 @@
         <img v-bind:src="defaultComputer | addPathImg">
     </div>
 
-
-    <button class="button" v-on:click="onClick">НАЖМИ</button>
-
+    <div id="messagesDiv">
+        {{message}}
+        <input v-if="questionMind" type="text"  />
+    </div>
 
 
     <div id="startWindow" v-if="start">
