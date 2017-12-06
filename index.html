@@ -11,6 +11,7 @@
 <div id="gameDiv">
 
     <div id="bone" @click="onBone('player')" :class="myThrow">
+        <div v-if="defaultBone==0">&#9825;</div>
         <div v-if="defaultBone==1">&#9856;</div>
         <div v-if="defaultBone==2">&#9857;</div>
         <div v-if="defaultBone==3">&#9858;</div>
