@@ -5,7 +5,7 @@ new Vue({
          // obj - "computer"||"player"
          // where - конечная точка
          // jamp - если нужно скачком
-         // tranzition - нужно ли передавать ход
+         // transition - нужно ли передавать ход
          if (where > 48 || where < 1) return;
          var pathEl = undefined;
          var step = (obj === "player") ? this.stepP : this.stepC;
@@ -20,11 +20,19 @@ new Vue({
          (obj === "player") ? this.stepP = step : this.stepC = step;
 
          if (obj === "player") {
-            this.wPlayer = (pathEl.x - 65) + "px";
-            this.hPlayer = (pathEl.y - 120) + "px";
+            if ((this.waiterP && this.defaultBone > 3) || !this.waiterP) {
+               this.wPlayer = (pathEl.x - 65) + "px";
+               this.hPlayer = (pathEl.y - 120) + "px";
+            } else{
+               step = where
+            }
          } else {
-            this.wComp = (pathEl.x - 50) + "px";
-            this.hComp = (pathEl.y - 105) + "px";
+            if ((this.waiterС && this.defaultBone > 3) || !this.waiterС) {
+               this.wComp = (pathEl.x - 50) + "px";
+               this.hComp = (pathEl.y - 105) + "px";
+            }else{
+               step = where
+            }
          }
 
          if (step !== where) {
@@ -48,6 +56,9 @@ new Vue({
       middleware: function (obj, where, transition) {
          var point = this.pathArr[where - 1].point;
 
+         if (obj == "player" && this.waiterP) point = null
+         if (obj == "computer" && this.waiterС) point = null
+
 
          switch (point) {
             case "forward":
@@ -55,12 +66,18 @@ new Vue({
             case "backward":
                return this.autoStep(obj, where - 1, null, transition);
             case "wait":
-               console.log(" ==ДУМАТЬ -- тут либо задать ребенку математическую задачу, чтобы выйти из ловушки, либо по условию= ");
-               return;
+
+               if (obj === "player") {
+                  this.waiterP = true;
+               } else {
+                  this.waiterС = true;
+               }
+
+
+               return this.autoStep(obj, where, null, transition);
             case "teleport":
                var where = +this.pathArr[where - 1].jump;
                return this.autoStep(obj, where, true, transition);
-            default:
 
          }
 
@@ -119,7 +136,7 @@ new Vue({
 
                this.boneDisabled = true;
 
-               // this.defaultBone = 3;
+               this.defaultBone = 2;
 
                this.onBone(obj);
                this.onStepAfterBone(obj);
@@ -156,8 +173,8 @@ new Vue({
       defaultPlayer: "Rose",
       defaultComputer: "Rosepiece",
       defaultBone: 0, // кость
-      stepP: 0, // шаги пользователя
-      stepC: 0, // шаги компьютера
+      stepP: 7, // шаги пользователя
+      stepC: 7, // шаги компьютера
 
       waiterP: false, // если попали в точку wait (ждут когда выпадет больше 4)
       waiterC: false,
