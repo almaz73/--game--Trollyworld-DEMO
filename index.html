@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-<!--<h2 class="titl">Привет Друг! Это игра Троллий Мир. Сможешь ли победить в честной гонке?</h2>-->
+<h2 class="titl">Привет Друг! Это игра Троллий Мир. Сможешь ли победить в честной гонке?</h2>
 <div id="gameDiv">
 
     <div id="bone" @click="onBone('player')" :class="myThrow">
@@ -21,10 +21,10 @@
     </div>
 
     <div id="playerPic" v-bind:style="{top: hPlayer, left:wPlayer}">
-        <img v-bind:src="defaultPlayer | addPathImg">
+        <img v-bind:src="defaultPlayer | getPathImg">
     </div>
     <div id="computerPic" v-bind:style="{top: hComp, left:wComp}">
-        <img v-bind:src="defaultComputer | addPathImg">
+        <img v-bind:src="defaultComputer | getPathImg">
     </div>
 
     <div id="messagesDiv">
@@ -38,16 +38,16 @@
         <h4>Выбери игрока</h4>
         <span v-for="troll in allTrolles">
             <div>
-                {{showHero(troll.name)?showHero(troll.name):"&nbsp;"}}
+                {{markHero(troll.name)?markHero(troll.name):"&nbsp;"}}
             </div>
-            <div>{{showHero(troll.name)?troll.name:'&nbsp;'}}</div>
+            <div>{{markHero(troll.name)?troll.name:'&nbsp;'}}</div>
             <br>
             <div>
             <img
                     v-bind:name="troll.name"
-                    v-bind:src="troll.name | addPathImg"
+                    v-bind:src="troll.name | getPathImg"
                     v-on:click="onChoiceHero($event)"
-                    v-bind:class="choseImg(troll.name)">
+                    v-bind:class="getClassChosenHero(troll.name)">
             </div>
         </span>
         <br><br>
@@ -55,8 +55,8 @@
     </div>
 
     <div id="startWindow" v-if="finish">
-        <br><br>
-        <span><h2>Победитель {{winner}}</h2></span><br><br><br>
+        <br><br><br><br>
+        <span><h2>Победитель {{winner}} !!!</h2></span><br><br><br>
         <button @click="onRepeatGame()">Играть еще раз</button>
     </div>
 

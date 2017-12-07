@@ -1,21 +1,26 @@
 new Vue({
    el: '#gameDiv',
    methods: {
+      /**
+       * Метод перемещения фигур. дополнительно обрабатывает какую фигуру двигать, заперащть двигать, если в ловушке,
+       * движение прыжки через несколько точек, проверка условия дошли ли до конца, проверка условия, передать ли ход
+       *
+       * @param obj {string} "computer"||"player"
+       * @param where {number} в какую точку нужно переместиться
+       * @param jamp {boolean} если нужно передвигаться через несколько точек сразу
+       * @param transition {boolean} передать ли ход другому игроку. Это нужно потому что приходится двигаться самому
+       * несколько раз
+       */
       autoStep: function (obj, where, jamp, transition) {
-         // obj - "computer"||"player"
-         // where - конечная точка
-         // jamp - если нужно скачком
-         // transition - нужно ли передавать ход
          if (where < 1) return;
          if (where > 48) where = 48;
-         var pathEl = undefined;
-         var step = (obj === "player") ? this.stepP : this.stepC;
-         step = (step > where) ? step = step - 1 : step = step + 1;
+         let pathEl = undefined;
+         let step = (obj === "player") ? this.stepP : this.stepC;
+         step = (step > where) ? step - 1 : step + 1;
          if (jamp) {
             pathEl = this.pathArr[where - 1];
             step = where
          }
-
 
          pathEl = (jamp) ? pathEl : this.pathArr[step - 1];
          (obj === "player") ? this.stepP = step : this.stepC = step;
@@ -39,7 +44,7 @@ new Vue({
          }
 
          if (step == 48) {
-            this.winner = (obj == "player") ? "ВЫ" : "КОМПЬЮТЕР";
+            this.winner = (obj == "player") ? "В Ы" : "К О М П Ь Ю Т Е Р";
             this.finish = true;
             this.message = "Игра окончена.";
             return;
@@ -50,26 +55,28 @@ new Vue({
                this.autoStep(obj, where, jamp, transition);
             }.bind(this), 500);
          } else {
-            // либо передаем ход, либо обрабатываем сюрпризы
-
             var point = this.pathArr[where - 1].point;
             if (point) {
                this.message = this.surprise[point];
             }
-
             setTimeout(function () {
                this.middleware(obj, where, transition)
             }.bind(this), (point) ? 2000 : 500);
          }
 
       },
+      /**
+       *  Обработка достигнутых точек
+       *  Либо передаем ход, либо обрабатываем сюрпризы
+       */
       middleware: function (obj, where, transition) {
          var point = this.pathArr[where - 1].point;
 
+         // Если уже в ловушке
          if (obj == "player" && this.waiterP) point = null;
          if (obj == "computer" && this.waiterС) point = null;
 
-
+         // обработка точек с условиями
          switch (point) {
             case "forward":
                return this.autoStep(obj, where + 1, null, transition);
@@ -85,11 +92,12 @@ new Vue({
             case "teleport":
                var where = +this.pathArr[where - 1].jump;
                return this.autoStep(obj, where, true, transition);
-
          }
-
          this.trans(obj, transition);
       },
+      /**
+       * Передача хода. Автоматически обрабатываем ход компьютера
+       */
       trans: function (obj, transition) { // передача хода
          if (transition) {
             this.onForAnotherPlayer(obj == "player" ? "computer" : "player");
@@ -100,7 +108,13 @@ new Vue({
             }.bind(this), 1000);
          }
       },
-      choseImg: function (val) { // css для выделения выбранных героев
+      /**
+       * На стартовой панели для выделения выбранных героев
+       *
+       * @param val {string} имя тролля
+       * @return {string} имя класса с рамкой выделенного тролля
+       */
+      getClassChosenHero: function (val) {
          if (val == this.defaultPlayer) {
             return "imgChoisedPlayer"
          }
@@ -109,7 +123,12 @@ new Vue({
          }
 
       },
-      onChoiceHero: function (event) { // перевыбираем игроков
+      /**
+       * На стартовой панели есть возможность выбрать троллей
+       *
+       * @param event
+       */
+      onChoiceHero: function (event) {
          this.defaultPlayer = event.target.name;
          var newArr = this.allTrolles.filter(function (el) {
             return el.name !== event.target.name
@@ -117,7 +136,13 @@ new Vue({
          var random = Math.round(Math.random() * 4);
          this.defaultComputer = newArr[random].name
       },
-      showHero: function (name) { // выбор героя
+      /**
+       * Отметить выбранного героя, для стартовой панели
+       *
+       * @param name
+       * @return {string}
+       */
+      markHero: function (name) {
          var tx = "";
          if (name == this.defaultPlayer) {
             tx = "Ваш игрок";
@@ -127,38 +152,44 @@ new Vue({
          }
          return tx;
       },
-      onStart: function () { //начинаем игру
+      /**
+       * Начинаем игру
+       */
+      onStart: function () {
          this.start = false;
          this.message = "Ваш ход. Бросайте кость.";
       },
-      onBone: function (obj) { // бросаем кость
-
+      /**
+       * Бросаем кость
+       *
+       * @param obj {string} игрок
+       */
+      onBone: function (obj) {
          if (this.boneDisabled && this.myThrow == "") return;
          this.myThrow = (this.myThrow === "") ? "little" : "";
-
          if (this.myThrow !== "") {
             setTimeout(function () {
                var random = Math.round(Math.random() * 5 + 1);
                this.defaultBone = random;
-
                this.boneDisabled = true;
-
-               // this.defaultBone = 4;
-
                this.onBone(obj);
                this.onStepAfterBone(obj);
             }.bind(this), 500)
          }
       },
+      /**
+       * Ход игрока или компьютер
+       */
       onStepAfterBone: function (obj) {
-         // ход игрока или компьютера
          setTimeout(function () {
             var nextStep = (obj === "player") ? this.stepP : this.stepC;
             this.autoStep(obj, this.defaultBone + nextStep, null, (obj === "player"));
          }.bind(this), 1000);
       },
+      /**
+       * Переход другому игроку
+       */
       onForAnotherPlayer: function (obj) {
-         // переход другому игроку
          if (obj == "computer") {
             setTimeout(function () {
                this.message = "Ход комьютера";
@@ -167,6 +198,9 @@ new Vue({
             }.bind(this), 1000);
          }
       },
+      /**
+       * Заново играть
+       */
       onRepeatGame: function () {
          this.finish = false;
          this.start = true;
@@ -181,7 +215,12 @@ new Vue({
 
    },
    filters: {
-      addPathImg: function (val) {
+      /**
+       *
+       * @param val {string} имя тролля
+       * @return {string} ссылка для отображения героя
+       */
+      getPathImg: function (val) {
          return "images/" + val + ".png";
       }
    },
