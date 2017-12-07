@@ -6,7 +6,8 @@ new Vue({
          // where - конечная точка
          // jamp - если нужно скачком
          // transition - нужно ли передавать ход
-         if (where > 48 || where < 1) return;
+         if (where < 1) return;
+         if (where > 48) where = 48;
          var pathEl = undefined;
          var step = (obj === "player") ? this.stepP : this.stepC;
          step = (step > where) ? step = step - 1 : step = step + 1;
@@ -23,16 +24,25 @@ new Vue({
             if ((this.waiterP && this.defaultBone > 3) || !this.waiterP) {
                this.wPlayer = (pathEl.x - 65) + "px";
                this.hPlayer = (pathEl.y - 120) + "px";
-            } else{
+               this.waiterP = false;
+            } else {
                step = where
             }
          } else {
             if ((this.waiterС && this.defaultBone > 3) || !this.waiterС) {
                this.wComp = (pathEl.x - 50) + "px";
                this.hComp = (pathEl.y - 105) + "px";
-            }else{
+               this.waiterС = false;
+            } else {
                step = where
             }
+         }
+
+         if (step == 48) {
+            this.winner = (obj == "player") ? "ВЫ" : "КОМПЬЮТЕР";
+            this.finish = true;
+            this.message = "Игра окончена.";
+            return;
          }
 
          if (step !== where) {
@@ -56,8 +66,8 @@ new Vue({
       middleware: function (obj, where, transition) {
          var point = this.pathArr[where - 1].point;
 
-         if (obj == "player" && this.waiterP) point = null
-         if (obj == "computer" && this.waiterС) point = null
+         if (obj == "player" && this.waiterP) point = null;
+         if (obj == "computer" && this.waiterС) point = null;
 
 
          switch (point) {
@@ -66,30 +76,29 @@ new Vue({
             case "backward":
                return this.autoStep(obj, where - 1, null, transition);
             case "wait":
-
                if (obj === "player") {
                   this.waiterP = true;
                } else {
                   this.waiterС = true;
                }
-
-
-               return this.autoStep(obj, where, null, transition);
+               return this.trans(obj, transition);
             case "teleport":
                var where = +this.pathArr[where - 1].jump;
                return this.autoStep(obj, where, true, transition);
 
          }
 
+         this.trans(obj, transition);
+      },
+      trans: function (obj, transition) { // передача хода
          if (transition) {
             this.onForAnotherPlayer(obj == "player" ? "computer" : "player");
          } else {
             setTimeout(function () {
-               this.message = "Ваш ход"
+               this.message = "Ваш ход. Бросайте кость."
                this.boneDisabled = false;
             }.bind(this), 1000);
          }
-
       },
       choseImg: function (val) { // css для выделения выбранных героев
          if (val == this.defaultPlayer) {
@@ -119,15 +128,13 @@ new Vue({
          return tx;
       },
       onStart: function () { //начинаем игру
-         this.start = false
+         this.start = false;
+         this.message = "Ваш ход. Бросайте кость.";
       },
       onBone: function (obj) { // бросаем кость
 
-
          if (this.boneDisabled && this.myThrow == "") return;
-
          this.myThrow = (this.myThrow === "") ? "little" : "";
-
 
          if (this.myThrow !== "") {
             setTimeout(function () {
@@ -136,7 +143,7 @@ new Vue({
 
                this.boneDisabled = true;
 
-               this.defaultBone = 2;
+               // this.defaultBone = 4;
 
                this.onBone(obj);
                this.onStepAfterBone(obj);
@@ -159,6 +166,17 @@ new Vue({
                this.onBone(obj)
             }.bind(this), 1000);
          }
+      },
+      onRepeatGame: function () {
+         this.finish = false;
+         this.start = true;
+         this.stepC = 0;
+         this.stepP = 0;
+         this.wPlayer = "0px";
+         this.hPlayer = "310px";
+         this.wComp = "0px";
+         this.hComp = "380px";
+         this.boneDisabled = false;
       }
 
    },
@@ -168,13 +186,15 @@ new Vue({
       }
    },
    data: {
+      winner: "",
       boneDisabled: false,
-      start: false,
+      finish: false,
+      start: true,
       defaultPlayer: "Rose",
-      defaultComputer: "Rosepiece",
+      defaultComputer: "Humorist",
       defaultBone: 0, // кость
-      stepP: 7, // шаги пользователя
-      stepC: 7, // шаги компьютера
+      stepP: 0, // шаги пользователя
+      stepC: 0, // шаги компьютера
 
       waiterP: false, // если попали в точку wait (ждут когда выпадет больше 4)
       waiterC: false,
@@ -244,7 +264,7 @@ new Vue({
          {id: 48, x: 1177, y: 499},
       ],
       myTimer: null,
-      message: "Ваш ход. Нажмите кость.",
+      message: "Ваш ход. Бросайте кость.",
       questionMind: false,
       surprise: {
          wait: " Ловушка. Тролль ходит только когда на кубике выпадает больше 3-x",

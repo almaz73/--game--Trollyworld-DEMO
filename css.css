@@ -31,6 +31,11 @@ button {
    pointer-events: none
 }
 
+#playerPic:after {
+   margin: -25px;
+   content: "Я";
+}
+
 #startWindow {
    position: absolute;
    width: 700px;

@@ -54,6 +54,12 @@
         <button @click="onStart()">НАЧАТЬ</button>
     </div>
 
+    <div id="startWindow" v-if="finish">
+        <br><br>
+        <span><h2>Победитель {{winner}}</h2></span><br><br><br>
+        <button @click="onRepeatGame()">Играть еще раз</button>
+    </div>
+
 </div>
 
 
