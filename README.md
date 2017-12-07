@@ -1,11 +1,10 @@
-Сюжет игры.
 
-[ДЕМО](http://fmap.ru/games/game/trollyWorld/index.html)
+[ДЕМО](http://fmap.ru/games/game/Trollyworld/index.html)
 
 Использует VUE.js в очень простом виде, покаызвает мощь этой технологии.
 Анимация движения использует css. У VUE есть и собственные способы создания анимации.
 
-![screen](http://fmap.ru/games/game/trollyworld/images/view.png)
+![screen](http://fmap.ru/games/game/Trollyworld/images/view.png)
 
 Сюжет игры.
 
